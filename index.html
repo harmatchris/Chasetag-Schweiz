@@ -158,6 +158,62 @@
     .tour-summary { flex-wrap: wrap; }
     .summary-item { min-width: 50%; border-bottom: 1px solid #21282f; }
   }
+
+  /* ══ GIF BANNER ══ */
+  .gif-banner-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto 56px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+  }
+  .gif-banner-wrap img.gif-img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  /* animated placeholder shown when no GIF is set */
+  .gif-placeholder {
+    width: 100%;
+    min-height: 180px;
+    border-radius: 14px;
+    border: 1px dashed #30393f;
+    background: linear-gradient(135deg, #0d1117 0%, #161c23 50%, #0d1117 100%);
+    background-size: 200% 200%;
+    animation: gifPlaceholderShimmer 3s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+  .gif-placeholder-icon { font-size: 28px; opacity: .5; }
+  @keyframes gifPlaceholderShimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  /* left/right gradient fades */
+  .gif-fade {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 140px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .gif-fade-l { left: 0;  background: linear-gradient(to right, #0d1117 0%, transparent 100%); }
+  .gif-fade-r { right: 0; background: linear-gradient(to left,  #0d1117 0%, transparent 100%); }
 </style>
 </head>
 <body>
@@ -305,6 +361,14 @@
 
 <p class="source-note" data-i18n-html="source_note"></p>
 
+<!-- ══ GIF BANNER (Chase Tag action loop) ══ -->
+<div class="gif-banner-wrap" id="gif-banner-wrap">
+  <img class="gif-img" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExd294aWp6bGsyOTB1dGdxaDB4NXJ2OXViNXZtZ240ZHB5MnMxY3BtOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ighiD7RsR2NGt9mcX5/giphy.gif" alt="Chase Tag action loop">
+  <div class="gif-fade gif-fade-l"></div>
+  <div class="gif-fade gif-fade-r"></div>
+</div>
+
+
 <script>
 // ─────────────────────────────────────────────
 // TRANSLATIONS
@@ -326,6 +390,7 @@ const T = {
     top_cantons_title:'Top Kantone – Potenzial', canton_zh:'Zürich', canton_be:'Bern', canton_ag:'Aargau',
     hub_bs_label:'Parkour Hub Basel', hub_zh_label:'Parkour Hub Zürich',
     source_note:'Quellen: STV Jahresbericht 2024 · Swiss Parkour Association (SPKA) · Wikipedia · Jugend+Sport BASPO<br>Turnverein-Zahlen proportional zu STV-Mitgliederzahlen geschätzt.',
+    gif_placeholder:'CHASE TAG ACTION · LOOP',
     tt_turnen:'STV-Vereine: ~', tt_parkour:'Parkour-Vereine: ',
     tt_pioneer:'★ Overground – Grösster Nachwuchs-Hub\nErstes Chase Tag Feld der Schweiz',
     basel_first_field:'Erste Chase Tag Arena der Schweiz',
