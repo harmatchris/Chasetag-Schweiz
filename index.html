@@ -217,14 +217,14 @@
 
 /* ── Project Description ── */
 #project-desc {
-  max-width: 960px; margin: 2.5rem auto 0; padding: 0 1.25rem;
+  max-width: 1140px; margin: 2.5rem auto 0; padding: 0 1.5rem; width: 100%;
 }
 #project-desc h2 {
   font-size: 1.5rem; font-weight: 700; color: var(--lime); margin-bottom: 1.25rem;
   letter-spacing: .04em; text-transform: uppercase;
 }
 .proj-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  display: grid; grid-template-columns: 1.7fr 1fr; gap: 2rem;
 }
 @media(max-width:640px){ .proj-grid { grid-template-columns: 1fr; } }
 .proj-desc-card {
@@ -244,7 +244,7 @@
 
 /* ── Cost Calculator ── */
 #cost-calc {
-  max-width: 960px; margin: 2.5rem auto 2rem; padding: 0 1.25rem;
+  max-width: 1140px; margin: 2.5rem auto 2rem; padding: 0 1.5rem; width: 100%;
 }
 #cost-calc h2 {
   font-size: 1.5rem; font-weight: 700; color: var(--lime); margin-bottom: .4rem;
@@ -266,7 +266,7 @@
   background: var(--teal); border-color: var(--teal); color: #fff;
 }
 .cost-cards {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;
 }
 .cost-card {
   background: var(--card); border: 1px solid #30363d; border-radius: 12px;
@@ -297,6 +297,25 @@
   padding-top: .55rem; margin-top: .25rem;
 }
 .cost-note { font-size: .72rem; color: var(--muted); margin-top: .6rem; font-style: italic; }
+
+/* ── Desktop Enhancements ── */
+@media (min-width: 900px) {
+  #project-desc h2 { font-size: 1.9rem; }
+  .proj-desc-card { font-size: 1rem; line-height: 1.8; padding: 2rem; }
+  .proj-facts { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .fact-pill { padding: 1rem 1.25rem; font-size: .9rem; }
+  #cost-calc h2 { font-size: 1.9rem; }
+  .person-toggle { gap: 1rem; margin-bottom: 2rem; }
+  .toggle-btn { width: 52px; height: 52px; font-size: 1.15rem; border-radius: 10px; }
+  .cost-card { border-radius: 14px; }
+  .cost-card-header { padding: 1rem 1.25rem; font-size: 1rem; }
+  .cost-rows { padding: .25rem 0; }
+  .cost-row { padding: .5rem 1.25rem; font-size: .9rem; }
+  .cost-note { padding: .75rem 1.25rem; }
+}
+@media (min-width: 1140px) {
+  .cost-cards { grid-template-columns: repeat(4, 1fr); }
+}
 </style>
 </head>
 <body>
@@ -904,7 +923,10 @@ const tourStops = [
         lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         rental_de:"CHF 3'500–6'500 (2 Tage)", rental_en:"CHF 3,500–6,500 (2 days)",
         note_de:'Idyllische Seefront direkt am Genfersee. Ideal für Frühjahrs- und Sommerevents. Gut erreichbar mit öV (M2-Metro).',
-        note_en:'Idyllic lakefront on Lake Geneva. Ideal for spring and summer events. Well served by public transport (M2 metro).'};
+        note_en:'Idyllic lakefront on Lake Geneva. Ideal for spring and summer events. Well served by public transport (M2 metro).' }
+    ]}
+];
+
 
 // Default venue images (embedded)
 const defaultImages = {
