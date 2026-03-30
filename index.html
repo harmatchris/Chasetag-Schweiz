@@ -214,6 +214,89 @@
   }
   .gif-fade-l { left: 0;  background: linear-gradient(to right, #0d1117 0%, transparent 100%); }
   .gif-fade-r { right: 0; background: linear-gradient(to left,  #0d1117 0%, transparent 100%); }
+
+/* ── Project Description ── */
+#project-desc {
+  max-width: 960px; margin: 2.5rem auto 0; padding: 0 1.25rem;
+}
+#project-desc h2 {
+  font-size: 1.5rem; font-weight: 700; color: var(--lime); margin-bottom: 1.25rem;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.proj-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+@media(max-width:640px){ .proj-grid { grid-template-columns: 1fr; } }
+.proj-desc-card {
+  background: var(--card); border: 1px solid #30363d; border-radius: 12px;
+  padding: 1.5rem; line-height: 1.7; color: var(--white); font-size: .95rem;
+}
+.proj-desc-card strong { color: var(--lime); }
+.proj-facts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+}
+.fact-pill {
+  background: #0d1f1e; border: 1px solid var(--teal); border-radius: 8px;
+  padding: .75rem 1rem; text-align: center; font-size: .85rem; font-weight: 600;
+  color: var(--lime);
+}
+.fact-pill .fact-label { font-size: .7rem; font-weight: 400; color: var(--muted); display: block; margin-top: .25rem; }
+
+/* ── Cost Calculator ── */
+#cost-calc {
+  max-width: 960px; margin: 2.5rem auto 2rem; padding: 0 1.25rem;
+}
+#cost-calc h2 {
+  font-size: 1.5rem; font-weight: 700; color: var(--lime); margin-bottom: .4rem;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+#cost-calc .calc-sub {
+  font-size: .85rem; color: var(--muted); margin-bottom: 1.25rem;
+}
+.person-toggle {
+  display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.person-toggle .ptlabel { font-size: .85rem; color: var(--muted); margin-left: .5rem; }
+.toggle-btn {
+  background: var(--card); border: 1px solid #30363d; border-radius: 8px;
+  color: var(--white); font-size: 1rem; font-weight: 700; width: 42px; height: 42px;
+  cursor: pointer; transition: all .15s;
+}
+.toggle-btn.active {
+  background: var(--teal); border-color: var(--teal); color: #fff;
+}
+.cost-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;
+}
+.cost-card {
+  background: var(--card); border: 1px solid #30363d; border-radius: 12px;
+  overflow: hidden;
+}
+.cost-card-header {
+  background: #0d2a2a; padding: .85rem 1.1rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.cost-card-header .city-name {
+  font-size: 1rem; font-weight: 700; color: var(--lime); flex: 1;
+}
+.venue-select {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
+  color: var(--white); font-size: .78rem; padding: .25rem .5rem; cursor: pointer;
+  max-width: 160px;
+}
+.cost-rows { padding: .9rem 1.1rem; }
+.cost-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .84rem; padding: .3rem 0; border-bottom: 1px solid #21262d;
+  color: #ccc;
+}
+.cost-row:last-child { border-bottom: none; }
+.cost-row .label { color: var(--muted); }
+.cost-row.total {
+  font-size: .95rem; font-weight: 700; color: var(--lime); border-top: 2px solid var(--teal);
+  padding-top: .55rem; margin-top: .25rem;
+}
+.cost-note { font-size: .72rem; color: var(--muted); margin-top: .6rem; font-style: italic; }
 </style>
 </head>
 <body>
@@ -228,6 +311,172 @@
   <h1 id="main-h1"></h1>
   <p class="subtitle" data-i18n-html="subtitle"></p>
 </header>
+
+<!-- ══ PROJECT DESCRIPTION ══════════════════════════════════════════ -->
+<section id="project-desc">
+  <h2 data-i18n="projDescTitle"></h2>
+  <div class="proj-grid">
+    <div class="proj-desc-card" data-i18n-html="projDescText"></div>
+    <div class="proj-facts">
+      <div class="fact-pill"><span data-i18n="projDescFact1"></span><span class="fact-label" data-i18n="projDescFact2"></span></div>
+      <div class="fact-pill"><span data-i18n="projDescFact3"></span><span class="fact-label" data-i18n="projDescFact4"></span></div>
+      <div class="fact-pill" style="grid-column:1/-1;background:#0d1f2a;border-color:var(--orange)">
+        <span style="color:var(--orange)" data-i18n="projDescMission"></span>
+        <span class="fact-label" data-i18n="projDescMissionText"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COST CALCULATOR ═══════════════════════════════════════════════ -->
+<section id="cost-calc">
+  <h2 data-i18n="costCalcTitle"></h2>
+  <p class="calc-sub" data-i18n="costCalcSub"></p>
+  <div class="person-toggle">
+    <button class="toggle-btn active" data-n="3">3</button>
+    <button class="toggle-btn" data-n="4">4</button>
+    <button class="toggle-btn" data-n="5">5</button>
+    <span class="ptlabel" data-i18n="persons"></span>
+  </div>
+  <div class="cost-cards" id="costCards"></div>
+</section>
+
+<script>
+(function(){
+  // ── Stop / venue cost data ────────────────────────────────────────────────
+  const stops = [
+    { id:'zurich',     city_de:'Zürich',     city_en:'Zurich',     local:true,  travel:0,
+      venues:[
+        { name:'The Circle',      rental_lo:8000,  rental_hi:12000 },
+        { name:'HB Haupthalle',   rental_lo:10000, rental_hi:15000 },
+        { name:'Bürkliplatz',     rental_lo:3500,  rental_hi:6000  }
+      ]},
+    { id:'basel',      city_de:'Basel',      city_en:'Basel',      local:false, travel:75,
+      venues:[
+        { name:'Barfüsserplatz',  rental_lo:4000,  rental_hi:7000  },
+        { name:'SBB Gundeli',     rental_lo:4500,  rental_hi:7500  },
+        { name:'Messeplatz',      rental_lo:5000,  rental_hi:9000  }
+      ]},
+    { id:'winterthur', city_de:'Winterthur', city_en:'Winterthur', local:true,  travel:25,
+      venues:[
+        { name:'Bahnhofplatz',    rental_lo:5000,  rental_hi:8000  },
+        { name:'Archhöfe',        rental_lo:4000,  rental_hi:7000  },
+        { name:'Stadtgarten',     rental_lo:2500,  rental_hi:5000  }
+      ]},
+    { id:'bern',       city_de:'Bern',       city_en:'Bern',       local:false, travel:80,
+      venues:[
+        { name:'Bundesplatz',     rental_lo:5000,  rental_hi:9000  },
+        { name:'Westside',        rental_lo:6000,  rental_hi:10000 },
+        { name:'Bern HB',         rental_lo:8000,  rental_hi:12000 }
+      ]},
+    { id:'luzern',     city_de:'Luzern',     city_en:'Lucerne',    local:false, travel:60,
+      venues:[
+        { name:'Mall of CH',      rental_lo:5000,  rental_hi:9000  },
+        { name:'Europaplatz',     rental_lo:3500,  rental_hi:6000  },
+        { name:'Inseli',          rental_lo:2500,  rental_hi:4500  }
+      ]},
+    { id:'stgallen',   city_de:'St. Gallen', city_en:'St. Gallen', local:false, travel:75,
+      venues:[
+        { name:'Shopping Arena',  rental_lo:6000,  rental_hi:10000 },
+        { name:'Gallusplatz',     rental_lo:3000,  rental_hi:5500  },
+        { name:'OLMA Messen',     rental_lo:5000,  rental_hi:9000  }
+      ]},
+    { id:'lausanne',   city_de:'Lausanne',   city_en:'Lausanne',   local:false, travel:120,
+      venues:[
+        { name:'Flon',                    rental_lo:4000, rental_hi:7000 },
+        { name:'St-François',             rental_lo:3500, rental_hi:6000 },
+        { name:'Place de la Navigation',  rental_lo:3500, rental_hi:6500 }
+      ]}
+  ];
+
+  const STAFF_PER_DAY = 400;
+  const HOTEL_PER_NIGHT = 150;
+  const DAYS = 4; // setup + 2 event + breakdown
+  const NIGHTS = 3;
+
+  let nPersons = 3;
+
+  function fmt(v){ return "CHF " + v.toLocaleString('de-CH'); }
+
+  function buildCards(){
+    const lang = document.documentElement.lang || 'de';
+    const T = window._T || {};
+    const container = document.getElementById('costCards');
+    if(!container) return;
+    container.innerHTML = stops.map(stop => {
+      const cityName = lang === 'de' ? stop.city_de : stop.city_en;
+      const venueOpts = stop.venues.map((v,i) =>
+        '<option value="' + i + '">' + v.name + '</option>'
+      ).join('');
+      return '<div class="cost-card" id="card-' + stop.id + '">' +
+        '<div class="cost-card-header">' +
+          '<span class="city-name">' + cityName + '</span>' +
+          '<select class="venue-select" data-stop="' + stop.id + '" onchange="window._recalcCard(this)">' + venueOpts + '</select>' +
+        '</div>' +
+        '<div class="cost-rows" id="rows-' + stop.id + '"></div>' +
+      '</div>';
+    }).join('');
+    stops.forEach(stop => recalcStop(stop, 0));
+  }
+
+  function recalcStop(stop, venueIdx){
+    const lang = document.documentElement.lang || 'de';
+    const v = stop.venues[venueIdx];
+    const rentalMid = Math.round((v.rental_lo + v.rental_hi) / 2);
+    const staff = STAFF_PER_DAY * DAYS * nPersons;
+    const hotel = stop.local ? 0 : HOTEL_PER_NIGHT * NIGHTS * nPersons;
+    const travel = stop.travel * nPersons;
+    const total = rentalMid + staff + hotel + travel;
+
+    const vLabel = lang === 'de' ? 'Venue-Miete' : 'Venue Rental';
+    const sLabel = lang === 'de' ? 'Personal (4 Tage)' : 'Staff (4 days)';
+    const hLabel = lang === 'de' ? 'Hotel' : 'Hotel';
+    const tLabel = lang === 'de' ? 'Anreise' : 'Travel';
+    const totLabel = lang === 'de' ? 'GESAMT' : 'TOTAL';
+    const noteLocal = lang === 'de' ? 'Lokales Team · kein Hotel' : 'Local team · no hotel';
+    const noteHotel = lang === 'de' ? (NIGHTS + ' Nächte × CHF ' + HOTEL_PER_NIGHT + '/Person') : (NIGHTS + ' nights × CHF ' + HOTEL_PER_NIGHT + '/person');
+    const staffNote = lang === 'de' ? (DAYS + ' Tage × CHF ' + STAFF_PER_DAY + '/Person') : (DAYS + ' days × CHF ' + STAFF_PER_DAY + '/person');
+
+    const rows = document.getElementById('rows-' + stop.id);
+    if(!rows) return;
+    rows.innerHTML =
+      '<div class="cost-row"><span class="label">' + vLabel + '</span><span>' + fmt(v.rental_lo) + ' – ' + fmt(v.rental_hi) + '</span></div>' +
+      '<div class="cost-row"><span class="label">' + sLabel + '</span><span>' + fmt(staff) + '</span></div>' +
+      '<div class="cost-row"><span class="label">' + hLabel + '</span><span>' + (hotel > 0 ? fmt(hotel) : (lang==='de'?'inklusive':'included')) + '</span></div>' +
+      '<div class="cost-row"><span class="label">' + tLabel + '</span><span>' + fmt(travel) + '</span></div>' +
+      '<div class="cost-row total"><span>' + totLabel + '</span><span>' + fmt(total) + '</span></div>' +
+      '<div class="cost-note">⚡ ' + staffNote + (stop.local ? ' · ' + noteLocal : ' · ' + noteHotel) + '</div>';
+  }
+
+  window._recalcCard = function(sel){
+    const stopId = sel.dataset.stop;
+    const stop = stops.find(s => s.id === stopId);
+    if(stop) recalcStop(stop, parseInt(sel.value));
+  };
+
+  function setPersons(n){
+    nPersons = n;
+    document.querySelectorAll('.toggle-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.n) === n);
+    });
+    stops.forEach(stop => {
+      const sel = document.querySelector('.venue-select[data-stop="' + stop.id + '"]');
+      recalcStop(stop, sel ? parseInt(sel.value) : 0);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    buildCards();
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function(){ setPersons(parseInt(this.dataset.n)); });
+    });
+  });
+
+  // Re-run when language changes (hook into existing i18n)
+  const _origI18n = window._applyI18n;
+  window._afterI18n = function(){ buildCards(); };
+})();
+</script>
 
 <div class="layout">
   <div class="map-wrap">
@@ -403,7 +652,28 @@ const T = {
     lbl_indoor:'INDOOR', lbl_outdoor:'OUTDOOR',
     upload_text:'BILD HINZUFÜGEN', upload_hint:'Higgsfield-Bild hier ablegen · Klicken zum Hochladen',
     img_change:'Bild ändern',
-  },
+    projDescTitle:'Über das Projekt',
+    projDescText:'<strong>Chase Tag Schweiz</strong> ist ein geplantes Pilot-Turnierprojekt, das Chase Tag – die spektakuläre Kombination aus Parkour und Fangen – in 7 Schweizer Städte bringt. Das Projekt verbindet Spitzensport mit Community-Events und macht urbane Bewegungskultur für die breite Bevölkerung erlebbar. Ziel ist es, 2027 eine landesweite Tour durchzuführen und Chase Tag langfristig in der Schweiz zu etablieren.',
+    projDescMission:'Unser Auftrag',
+    projDescMissionText:'Urbanem Sport eine Bühne geben – auf ikonischen Plätzen, in lebendigen Städten.',
+    projDescFact1:'7 Schweizer Städte',
+    projDescFact2:'Frühjahr–Herbst 2027',
+    projDescFact3:'3–5 Personen Team',
+    projDescFact4:'~2'500–85'000 Besucher/Ort',
+    costCalcTitle:'Kostenübersicht pro Stop',
+    costCalcSub:'Gesamtkosten pro Durchführungsort – inkl. Aufbau & Abbautag',
+    persons:'Personen vor Ort',
+    costVenue:'Venue-Miete (2 Tage)',
+    costStaff:'Personal (4 Tage)',
+    costHotel:'Hotel',
+    costTravel:'Anreise (Rückfahrt)',
+    costTotal:'GESAMT',
+    setupNote:'inkl. 1 Aufbau- & 1 Abbautag',
+    selectVenue:'Venue wählen',
+    staffDay:'CHF 400/Person/Tag',
+    hotelNight:'CHF 150/Person/Nacht',
+    localTeam:'Lokales Team – kein Hotel',
+      },
   en: {
     eyebrow:'Chase Tag Switzerland – Pre-project 2026', h1:'Sports<span>Demography</span><br>Switzerland',
     subtitle:'Density of gymnastics clubs (STV) and parkour clubs by canton –<br>Basis for the 2027 Pilot Tour',
@@ -432,7 +702,28 @@ const T = {
     lbl_indoor:'INDOOR', lbl_outdoor:'OUTDOOR',
     upload_text:'ADD IMAGE', upload_hint:'Drop Higgsfield image here · Click to upload',
     img_change:'Change image',
-  }
+    projDescTitle:'About the Project',
+    projDescText:'<strong>Chase Tag Switzerland</strong> is a planned pilot tournament project bringing Chase Tag – the spectacular combination of parkour and tag – to 7 Swiss cities. The project connects elite sport with community events, making urban movement culture accessible to the wider public. The goal is to run a nationwide tour in 2027 and permanently establish Chase Tag in Switzerland.',
+    projDescMission:'Our Mission',
+    projDescMissionText:'Give urban sport a stage – on iconic squares, in vibrant cities.',
+    projDescFact1:'7 Swiss Cities',
+    projDescFact2:'Spring–Autumn 2027',
+    projDescFact3:'3–5 Person Team',
+    projDescFact4:'~2,500–85,000 visitors/location',
+    costCalcTitle:'Cost Overview per Stop',
+    costCalcSub:'Total execution costs per location – incl. setup & breakdown day',
+    persons:'People on Site',
+    costVenue:'Venue Rental (2 days)',
+    costStaff:'Staff (4 days)',
+    costHotel:'Hotel',
+    costTravel:'Travel (return)',
+    costTotal:'TOTAL',
+    setupNote:'incl. 1 setup & 1 breakdown day',
+    selectVenue:'Select Venue',
+    staffDay:'CHF 400/person/day',
+    hotelNight:'CHF 150/person/night',
+    localTeam:'Local team – no hotel needed',
+      }
 };
 
 // ─────────────────────────────────────────────
@@ -446,21 +737,21 @@ const tourStops = [
         visitors:85000, area_total:"~12'000 m²", area_event:"~3'000 m²", indoor:true,
         season_de:'Ganzjährig · ideal März–Mai', season_en:'Year-round · ideal March–May',
         permit_de:'The Circle Management', permit_en:'The Circle Management',
-        lead_de:'6–8 Wochen', lead_en:'6–8 weeks', stars:5,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:5,
         note_de:"Für Events konzipiert. Grosszügige Innenflächen, direkter Flughafen-/Bahnzugang. Keine Wetterabhängigkeit. Mediale Wirkung maximal.",
         note_en:"Designed for events. Large indoor areas, direct airport & rail access. Weather-independent. Maximum media impact." },
       { short:'HB Haupthalle', name_de:'Zürich HB – Haupthalle', name_en:'Zurich HB – Main Hall',
         visitors:450000, area_total:"~3'000 m²", area_event:"~900 m²", indoor:true,
         season_de:'Ganzjährig · ideal Herbst/Winter', season_en:'Year-round · ideal Autumn/Winter',
         permit_de:'SBB Immobilien Events', permit_en:'SBB Real Estate Events',
-        lead_de:'8–12 Wochen', lead_en:'8–12 weeks', stars:4,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:4,
         note_de:'Höchste Frequenz aller CH-Standorte. Eindrückliches Setting. SBB-Eventprozess klar definiert.',
         note_en:'Highest footfall of all Swiss venues. Impressive setting. SBB event process well-defined.' },
       { short:'Bürkliplatz', name_de:'Bürkliplatz / Seeufer', name_en:'Bürkliplatz / Lakefront',
         visitors:40000, area_total:"~8'000 m²", area_event:"~2'000 m²", indoor:false,
         season_de:'Juni–August · Outdoor', season_en:'June–August · Outdoor',
         permit_de:'Stadt Zürich (Stadtentwicklung)', permit_en:'City of Zurich',
-        lead_de:'10–14 Wochen', lead_en:'10–14 weeks', stars:4,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         note_de:'Ikonische Seelage, sehr frequentiert im Sommer. Mediale Wirkung mit Bergpanorama.',
         note_en:'Iconic lakeside setting, very busy in summer. Media impact with mountain backdrop.' }
     ]},
@@ -471,21 +762,21 @@ const tourStops = [
         visitors:55000, area_total:"~5'000 m²", area_event:"~1'500 m²", indoor:false,
         season_de:'Mai–September · Outdoor', season_en:'May–September · Outdoor',
         permit_de:'Stadt Basel (Sicherheitsdept.)', permit_en:'City of Basel',
-        lead_de:'6–8 Wochen', lead_en:'6–8 weeks', stars:5,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:5,
         note_de:'Idealer urbaner Platz mit Café-Atmosphäre. Regelmässige Grossevents. Pioneer-Community aus Overground bereits vorhanden.',
         note_en:'Ideal urban square with café atmosphere. Regular large events. Pioneer community from Overground already in place.' },
       { short:'SBB Gundeli', name_de:'Basel SBB – Gundeli Ausgang', name_en:'Basel SBB – Gundeli Exit',
         visitors:90000, area_total:"~800 m²", area_event:"~350 m²", indoor:false,
         season_de:'Frühling / Herbst', season_en:'Spring / Autumn',
         permit_de:'SBB Immobilien Events', permit_en:'SBB Real Estate Events',
-        lead_de:'8–12 Wochen', lead_en:'8–12 weeks', stars:3,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:3,
         note_de:'Sehr hohe Passantenfrequenz, aber begrenzte Fläche. Chase Tag Feld knapp möglich (~13×13m).',
         note_en:'Very high footfall, but limited space. Chase Tag field barely feasible (~13×13m).' },
       { short:'Messeplatz', name_de:'Messeplatz (Messegelände)', name_en:'Messeplatz (Exhibition Square)',
         visitors:42000, area_total:"~6'000 m²", area_event:"~2'000 m²", indoor:false,
         season_de:'Sommer · Outdoor', season_en:'Summer · Outdoor',
         permit_de:'Stadt Basel', permit_en:'City of Basel',
-        lead_de:'8–10 Wochen', lead_en:'8–10 weeks', stars:4,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         note_de:'Grosszügiger Platz beim Messegelände. Regelmässig Grossveranstaltungen, sehr gute Infrastruktur und ÖV-Anbindung.',
         note_en:'Spacious square near the exhibition grounds. Regularly hosts large events, excellent infrastructure and public transport links.' }
     ]},
@@ -496,21 +787,21 @@ const tourStops = [
         visitors:45000, area_total:"~1'500 m²", area_event:"~600 m²", indoor:false,
         season_de:'Frühling / Herbst', season_en:'Spring / Autumn',
         permit_de:'SBB + Stadt Winterthur', permit_en:'SBB + City of Winterthur',
-        lead_de:'8–10 Wochen', lead_en:'8–10 weeks', stars:4,
+        lead_de:'4–6 Monate ⚠ SBB-Genehmigung', lead_en:'4–6 months ⚠ SBB permit', stars:4,
         note_de:'ZHAW-Studenten frequentieren täglich. Junge offene Stadtkultur. Genügend Fläche für Standardfeld.',
         note_en:'ZHAW students pass through daily. Young open city culture. Sufficient space for standard field.' },
       { short:'Archhöfe', name_de:'Archhöfe (Indoor Shopping)', name_en:'Archhöfe (Indoor Mall)',
         visitors:8000, area_total:"~2'000 m²", area_event:"~500 m²", indoor:true,
         season_de:'Herbst / Winter · Indoor', season_en:'Autumn / Winter · Indoor',
         permit_de:'Archhöfe Management', permit_en:'Archhöfe Management',
-        lead_de:'4–6 Wochen', lead_en:'4–6 weeks', stars:3,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:3,
         note_de:'Indoor Option für kühlere Monate. Geringere Frequenz, aber kontrolliertes Umfeld.',
         note_en:'Indoor option for cooler months. Lower footfall but controlled environment.' },
       { short:'Stadtgarten', name_de:'Stadtgarten / Rudolfplatz', name_en:'Stadtgarten / Rudolfplatz',
         visitors:15000, area_total:"~6'000 m²", area_event:"~1'200 m²", indoor:false,
         season_de:'Juni–August · Outdoor', season_en:'June–August · Outdoor',
         permit_de:'Stadt Winterthur', permit_en:'City of Winterthur',
-        lead_de:'6–8 Wochen', lead_en:'6–8 weeks', stars:4,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         note_de:'Grüne Outdoorfläche mit entspannter Atmosphäre. Ideal für Sommerevent.',
         note_en:'Green outdoor space with relaxed atmosphere. Ideal for summer event.' }
     ]},
@@ -521,21 +812,21 @@ const tourStops = [
         visitors:30000, area_total:"~10'000 m²", area_event:"~2'500 m²", indoor:false,
         season_de:'Mai–September · Outdoor · Iconic', season_en:'May–September · Outdoor · Iconic',
         permit_de:'Stadt Bern (Polizei + Stadtplanung)', permit_en:'City of Bern',
-        lead_de:'12–16 Wochen ⚠ früh anmelden!', lead_en:'12–16 weeks ⚠ apply early!', stars:5,
+        lead_de:'6–12 Monate ⚠ so früh wie möglich!', lead_en:'6–12 months ⚠ book ASAP!', stars:5,
         note_de:'Ikonischster Platz der CH vor dem Bundeshaus. Maximale politische Sichtbarkeit. Sehr begehrt – frühzeitig anmelden!',
         note_en:"Switzerland's most iconic square in front of parliament. Maximum political visibility. Very popular – apply early!" },
       { short:'Westside', name_de:'Westside Shopping & Entertainment', name_en:'Westside Shopping & Entertainment',
         visitors:11000, area_total:"~80'000 m² (Komplex)", area_event:"~1'500 m²", indoor:true,
         season_de:'Herbst / Winter · Indoor', season_en:'Autumn / Winter · Indoor',
         permit_de:'Westside Management', permit_en:'Westside Management',
-        lead_de:'4–6 Wochen', lead_en:'4–6 weeks', stars:4,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:4,
         note_de:'Modernes Unterhaltungszentrum mit Kino und Therme. Event-affines Publikum, gute Infrastruktur.',
         note_en:'Modern entertainment complex with cinema and spa. Event-oriented audience, good infrastructure.' },
       { short:'Bern HB', name_de:'Bern HB – Bahnhofplatz', name_en:'Bern HB – Bahnhofplatz',
         visitors:75000, area_total:"~2'000 m²", area_event:"~700 m²", indoor:false,
         season_de:'Frühling', season_en:'Spring',
         permit_de:'SBB Immobilien Events', permit_en:'SBB Real Estate Events',
-        lead_de:'8–10 Wochen', lead_en:'8–10 weeks', stars:3,
+        lead_de:'3–5 Monate ⚠ SBB-Genehmigung', lead_en:'3–5 months ⚠ SBB permit', stars:3,
         note_de:'Sehr hohe Frequenz, aber beengter Raum. Bundesplatz klar vorzuziehen.',
         note_en:'Very high footfall but cramped space. Bundesplatz clearly preferable.' }
     ]},
@@ -546,21 +837,21 @@ const tourStops = [
         visitors:22000, area_total:"~95'000 m² (Mall)", area_event:"~3'500 m²", indoor:true,
         season_de:'Ganzjährig · ideal Herbst', season_en:'Year-round · ideal Autumn',
         permit_de:'Mall of Switzerland Management', permit_en:'Mall of Switzerland Management',
-        lead_de:'6–8 Wochen', lead_en:'6–8 weeks', stars:5,
+        lead_de:'2–3 Monate', lead_en:'2–3 months', stars:5,
         note_de:'Grösste Indoor-Eventfläche der Tour. Professionelle Infrastruktur, Foodcourt als Zuschauertribüne nutzbar.',
         note_en:'Largest indoor event space of the tour. Professional infrastructure, food court usable as spectator stand.' },
       { short:'Europaplatz', name_de:'Europaplatz / Luzern HB', name_en:'Europaplatz / Lucerne HB',
         visitors:50000, area_total:"~2'000 m²", area_event:"~800 m²", indoor:false,
         season_de:'Frühling / Frühherbst', season_en:'Spring / Early Autumn',
         permit_de:'Stadt Luzern + SBB', permit_en:'City of Lucerne + SBB',
-        lead_de:'8–10 Wochen', lead_en:'8–10 weeks', stars:4,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:4,
         note_de:'Frisch renovierter Platz, geographisches Zentrum der Schweiz – symbolisch stark.',
         note_en:'Freshly renovated square, geographic centre of Switzerland – symbolically powerful.' },
       { short:'Inseli', name_de:'Inseli / Seeufer Luzern', name_en:'Inseli / Lake Lucerne Shore',
         visitors:25000, area_total:"~5'000 m²", area_event:"~1'800 m²", indoor:false,
         season_de:'Juni–August · Outdoor', season_en:'June–August · Outdoor',
         permit_de:'Stadt Luzern', permit_en:'City of Lucerne',
-        lead_de:'8–12 Wochen', lead_en:'8–12 weeks', stars:4,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         note_de:'Traumlage am Vierwaldstättersee mit Bergpanorama. Maximale Medienwirkung.',
         note_en:'Dream location on Lake Lucerne with mountain panorama. Maximum media impact.' }
     ]},
@@ -571,21 +862,21 @@ const tourStops = [
         visitors:22000, area_total:"~63'000 m² (Mall)", area_event:"~2'000 m²", indoor:true,
         season_de:'Herbst / Winter · Indoor', season_en:'Autumn / Winter · Indoor',
         permit_de:'Shopping Arena Management', permit_en:'Shopping Arena Management',
-        lead_de:'4–8 Wochen', lead_en:'4–8 weeks', stars:5,
+        lead_de:'2–3 Monate', lead_en:'2–3 months', stars:5,
         note_de:'Grösste Mall der Ostschweiz. Riesiges Atrium – Zuschauer von mehreren Etagen möglich. Eventerprobte Location.',
         note_en:'Largest mall in eastern Switzerland. Huge atrium – spectators from multiple floors possible. Proven event location.' },
       { short:'Gallusplatz', name_de:'Gallusplatz / Marktgasse (Altstadt)', name_en:'Gallusplatz / Marktgasse (Old Town)',
         visitors:20000, area_total:"~3'000 m²", area_event:"~900 m²", indoor:false,
         season_de:'Sommer · Frühherbst', season_en:'Summer · Early Autumn',
         permit_de:'Stadt St. Gallen', permit_en:'City of St. Gallen',
-        lead_de:'8–10 Wochen', lead_en:'8–10 weeks', stars:4,
+        lead_de:'3–4 Monate', lead_en:'3–4 months', stars:4,
         note_de:'Historische Kulisse in der Altstadt. Starker Kontrast zwischen Architektur und Urban Sport.',
         note_en:'Historic backdrop in old town. Strong contrast between architecture and urban sport.' },
       { short:'OLMA Messen', name_de:'OLMA Messen (Eventgelände)', name_en:'OLMA Messen (Event Grounds)',
         visitors:5000, area_total:"~60'000 m² (Gelände)", area_event:"~5'000 m²", indoor:true,
         season_de:'Ganzjährig · Hallenfläche', season_en:'Year-round · Hall space',
         permit_de:'OLMA Messen St. Gallen', permit_en:'OLMA Messen St. Gallen',
-        lead_de:'4–6 Wochen', lead_en:'4–6 weeks', stars:3,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:3,
         note_de:'Professionelle Hallenflächen, aber geringe Passantenfrequenz. Eher für Finale/Hauptevent geeignet.',
         note_en:'Professional hall spaces, but low passing traffic. Better suited as a finale / main event.' }
     ]},
@@ -596,28 +887,24 @@ const tourStops = [
         visitors:15000, area_total:"~8'000 m² (Areal)", area_event:"~2'000 m²", indoor:false,
         season_de:'Mai–Oktober · Outdoor/Indoor Mix', season_en:'May–October · Outdoor/Indoor Mix',
         permit_de:'Flon SA (privates Areal)', permit_en:'Flon SA (private area)',
-        lead_de:'4–6 Wochen', lead_en:'4–6 weeks', stars:5,
+        lead_de:'2–4 Monate', lead_en:'2–4 months', stars:5,
         note_de:'Urbanste Location der Tour. Historisch verankert in Urban Sports. EPFL/UNIL-Community direkt nebenan.',
         note_en:'Most urban location of the tour. Historically rooted in urban sports. EPFL/UNIL community right nearby.' },
       { short:'St-François', name_de:'Place St-François', name_en:'Place St-François',
         visitors:40000, area_total:"~3'000 m²", area_event:"~1'000 m²", indoor:false,
         season_de:'Frühling / Sommer · Outdoor', season_en:'Spring / Summer · Outdoor',
         permit_de:'Ville de Lausanne', permit_en:'Ville de Lausanne',
-        lead_de:'8–12 Wochen', lead_en:'8–12 weeks', stars:4,
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
         note_de:'Zentralster Platz Lausannes, höchste Frequenz. Ikonisches Stadtbild.',
         note_en:'Most central square in Lausanne, highest footfall. Iconic cityscape.' },
-      { short:'Lausanne HB', name_de:'Lausanne HB (Gare CFF)', name_en:'Lausanne HB (Gare CFF)',
-        visitors:100000, area_total:"~1'800 m²", area_event:"~600 m²", indoor:false,
-        season_de:'Ganzjährig', season_en:'Year-round',
-        permit_de:'SBB / CFF Immobilien Events', permit_en:'SBB / CFF Real Estate Events',
-        lead_de:'8–12 Wochen', lead_en:'8–12 weeks', stars:3,
-        note_de:'Enorme Frequenz, aber begrenzte Fläche. SBB-Prozess aufwändiger in der Romandie.',
-        note_en:'Enormous footfall but limited space. SBB process more complex in Romandy.' }
-    ]}
-];
-
-// Image memory: { 'zurich_0': dataURL, ... }
-const venueImages = {};
+      { short:'Place de la Navigation', name_de:'Place de la Navigation (Lausanne)', name_en:'Place de la Navigation (Lausanne)',
+        visitors:30000, area_total:"~3'500 m²", area_event:"~2'000 m²", indoor:false,
+        season_de:'April – Oktober', season_en:'April – October',
+        permit_de:'Ville de Lausanne – Service des parcs', permit_en:'City of Lausanne – Parks Dept.',
+        lead_de:'3–5 Monate', lead_en:'3–5 months', stars:4,
+        rental_de:"CHF 3'500–6'500 (2 Tage)", rental_en:"CHF 3,500–6,500 (2 days)",
+        note_de:'Idyllische Seefront direkt am Genfersee. Ideal für Frühjahrs- und Sommerevents. Gut erreichbar mit öV (M2-Metro).',
+        note_en:'Idyllic lakefront on Lake Geneva. Ideal for spring and summer events. Well served by public transport (M2 metro).'};
 
 // Default venue images (embedded)
 const defaultImages = {
